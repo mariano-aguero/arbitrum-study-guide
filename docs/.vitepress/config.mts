@@ -2,9 +2,9 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   base: '/arbitrum-study-guide/',
-  title: 'Arbitrum Fellowship Study Guide',
+  title: 'Arbitrum Study Guide',
   description:
-    'Summarized study notes and reference material from the Arbitrum Stylus Fellowship',
+    'Concise, searchable study notes on Ethereum, Arbitrum and Stylus — a quick-reference guide for the web3 community',
   lang: 'en-US',
   lastUpdated: true,
 
