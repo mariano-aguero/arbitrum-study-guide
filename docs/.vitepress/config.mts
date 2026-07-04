@@ -34,7 +34,7 @@ export default defineConfig({
     socialLinks: [
       {
         icon: 'github',
-        link: 'https://github.com/mariano-aguero/arbitrum-fellowship',
+        link: 'https://github.com/mariano-aguero/arbitrum-study-guide',
       },
     ],
   },
