@@ -34,6 +34,10 @@ export default defineConfig({
             text: '1.3 Dev Environment & Tooling',
             link: '/modules/1.3-dev-environment-tooling',
           },
+          {
+            text: '1.4 Critical Infrastructure',
+            link: '/modules/1.4-critical-infrastructure',
+          },
         ],
       },
     ],
