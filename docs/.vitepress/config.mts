@@ -26,6 +26,10 @@ export default defineConfig({
             text: '1.1 Ethereum Execution Model',
             link: '/modules/1.1-ethereum-execution-model',
           },
+          {
+            text: '1.2 Solidity, ABI & Contract Lifecycle',
+            link: '/modules/1.2-solidity-abi-contract-lifecycle',
+          },
         ],
       },
     ],
