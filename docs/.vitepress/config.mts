@@ -38,6 +38,10 @@ export default defineConfig({
             text: '1.4 Critical Infrastructure',
             link: '/modules/1.4-critical-infrastructure',
           },
+          {
+            text: '1.5 Why L2s Exist',
+            link: '/modules/1.5-why-l2s-exist',
+          },
         ],
       },
     ],
