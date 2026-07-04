@@ -30,6 +30,10 @@ export default defineConfig({
             text: '1.2 Solidity, ABI & Contract Lifecycle',
             link: '/modules/1.2-solidity-abi-contract-lifecycle',
           },
+          {
+            text: '1.3 Dev Environment & Tooling',
+            link: '/modules/1.3-dev-environment-tooling',
+          },
         ],
       },
     ],
