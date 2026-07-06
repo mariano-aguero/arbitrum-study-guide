@@ -42,6 +42,10 @@ export default defineConfig({
             text: '1.5 Why L2s Exist',
             link: '/modules/1.5-why-l2s-exist',
           },
+          {
+            text: 'Live Q&A — Week 1',
+            link: '/modules/live-qa-week-1',
+          },
         ],
       },
     ],
