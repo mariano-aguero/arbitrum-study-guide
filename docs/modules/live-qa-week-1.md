@@ -26,10 +26,6 @@ The recurring patterns that matter: **visibility** (`private` ≠ secret on-chai
 
 📖 Detail: [1.3 Dev Environment & Tooling](/modules/1.3-dev-environment-tooling) · [1.4 Critical Infrastructure](/modules/1.4-critical-infrastructure)
 
-## Week 1 Exercise: 01 — Community Vault
-
-Build a **mini crowdfunding contract**: accept ETH contributions, mint ERC-20 receipts, handle withdrawals and refunds with deadline + goal logic. It exercises everything from this week: state management, token standards, access control, reentrancy, events, and time-dependent testing.
-
 ## Week 1 Outcomes
 
 By the end of the week you should be able to:
