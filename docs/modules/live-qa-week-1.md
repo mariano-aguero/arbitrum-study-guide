@@ -28,9 +28,97 @@ The recurring patterns that matter: **visibility** (`private` ≠ secret on-chai
 
 ## Week 1 Outcomes
 
-By the end of the week you should be able to:
+### 1. Read & understand a Solidity contract end-to-end
 
-- [ ] **Read & understand a Solidity contract end-to-end** — open any verified contract and follow it: state variables and their storage layout, visibility of each function, what the modifiers guard, which functions mutate state vs read it, and what each `emit` communicates to the outside.
-- [ ] **Compile and deploy a sample contract to a local Hardhat or Foundry node** — the full local loop: `anvil` (or `npx hardhat node`) for a chain with funded accounts, `forge create` / a deploy script to put the contract on it, and `cast call` / console to interact. No testnet, no real ETH.
-- [ ] **Explain the gas model and the EVM execution path** — trace a tx from signature to state change: calldata in (selector + args) → opcodes over stack/memory/storage → gas metered per opcode under EIP-1559 (base fee burned + tip), refund of the unused limit, revert if it runs out.
-- [ ] **Identify when an oracle or an indexer is needed in a dApp design** — spot the two gaps: the contract needs *external data* (a price, randomness) → oracle (Chainlink); the frontend needs *historical/aggregated queries* ("all deposits by user") that raw RPC can't serve → indexer (The Graph, Ponder).
+Every contract is built from the same pieces, in roughly this order:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.33;              // 1. compiler version
+
+import {ERC20} from "@openzeppelin/..."; // 2. imports (audited libs)
+
+contract Vault is ERC20 {             // 3. inheritance
+    address public owner;             // 4. state variables → live in storage
+    mapping(address => uint256) public deposits;
+
+    event Deposited(address indexed who, uint256 amount); // 5. events
+
+    error NotOwner();                 // 6. custom errors (cheaper than strings)
+
+    modifier onlyOwner() {            // 7. reusable guards
+        if (msg.sender != owner) revert NotOwner();
+        _;
+    }
+
+    constructor() ERC20("Vault", "VLT") { // 8. runs ONCE at deploy
+        owner = msg.sender;
+    }
+
+    receive() external payable {}     // 9. accepts plain ETH transfers
+
+    function deposit() external payable {   // 10. the actual logic
+        deposits[msg.sender] += msg.value;  //     writes → cost gas
+        emit Deposited(msg.sender, msg.value);
+    }
+
+    function balanceOf_(address a) external view returns (uint256) {
+        return deposits[a];           // `view` → read-only, free via eth_call
+    }
+}
+```
+
+How to read one end-to-end: start at the **state variables** (that's the data model), then the **constructor** (initial setup), then each **external/public function** asking three questions — *who can call it* (modifiers/requires), *what state does it change*, *what does it emit*. `view`/`pure` functions are the read-only API; `payable` ones can receive ETH.
+
+### 2. Compile and deploy a sample contract to a local node
+
+The full loop with **Foundry**, step by step:
+
+```bash
+# 1. Scaffold a project (src/, test/, foundry.toml)
+forge init my-vault && cd my-vault
+
+# 2. Compile: Solidity → bytecode + ABI (in out/)
+forge build
+
+# 3. In another terminal: local chain — 10 accounts pre-funded
+#    with 10,000 ETH, private keys printed on screen
+anvil
+
+# 4. Deploy: sends a tx with the bytecode, no `to` address
+forge create src/Vault.sol:Vault \
+  --rpc-url http://localhost:8545 \
+  --private-key <one-anvil-key> --broadcast
+#    → prints "Deployed to: 0x5FbDB..."
+
+# 5. Interact from the CLI
+cast send 0x5FbDB... "deposit()" --value 1ether --private-key <key> \
+  --rpc-url http://localhost:8545                       # write (tx)
+cast call 0x5FbDB... "balanceOf_(address)" <addr> \
+  --rpc-url http://localhost:8545                       # read (free)
+```
+
+With **Hardhat** the loop is the same with JS/TS tooling: `npx hardhat node` (local chain) → `npx hardhat compile` → deploy script with `npx hardhat run scripts/deploy.ts --network localhost`.
+
+### 3. Explain the gas model and the EVM execution path
+
+What happens between "sign" and "state changed", step by step:
+
+1. **You sign a tx** specifying: `to`, calldata (selector + args), a **gas limit** (max you allow), and EIP-1559 fees (**max fee** ceiling + **priority tip**).
+2. **Upfront charge** — before running anything, the protocol deducts the intrinsic cost: 21,000 base + a fee per calldata byte. Not enough limit? Rejected.
+3. **The EVM executes** the contract's bytecode opcode by opcode, using the **stack** for operands, **memory** for scratch data, **storage** for persistent writes. Each opcode deducts gas from the limit: `ADD` costs 3, an `SSTORE` (storage write) up to 20,000+ — writing is what's expensive.
+4. **Two possible endings:**
+   - **Out of gas or `revert`** → *all* state changes are rolled back, but the gas consumed up to that point is *not* refunded (the computation happened).
+   - **Success** → state persists, events are written as logs into the receipt.
+5. **Final bill** = `gas used × (base fee + tip)`. The **base fee is burned** (set per block by protocol, ±12.5% with demand); the **tip goes to the validator**; whatever's left of your limit and of `max fee − actual fee` is **refunded**.
+
+### 4. Identify when an oracle or an indexer is needed
+
+Two different gaps, two different tools:
+
+| The gap | The tool | Examples |
+|---|---|---|
+| **The contract** needs data that doesn't exist on-chain, *at execution time* | **Oracle** (Chainlink) | ETH/USD price for a liquidation, verifiable randomness for a mint, calling a function on schedule |
+| **The frontend** needs historical or aggregated queries that raw RPC can't answer efficiently | **Indexer** (The Graph, Ponder, Subsquid) | "all deposits by this user", leaderboards, volume charts, activity feeds |
+
+Rules of thumb: if the *EVM must know it to execute correctly* → oracle. If *only humans/UIs need it after the fact* → indexer (it just reads the events your contract already emits — which is why emitting good events matters). Current state of one thing (`balanceOf`) needs neither: a direct `eth_call` is enough.
