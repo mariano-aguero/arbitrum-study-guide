@@ -55,6 +55,10 @@ export default defineConfig({
             text: '2.1 Nitro Architecture',
             link: '/modules/2.1-nitro-architecture',
           },
+          {
+            text: '2.2 Fraud Proofs & BoLD',
+            link: '/modules/2.2-fraud-proofs-and-bold',
+          },
         ],
       },
     ],
