@@ -59,6 +59,10 @@ export default defineConfig({
             text: '2.2 Fraud Proofs & BoLD',
             link: '/modules/2.2-fraud-proofs-and-bold',
           },
+          {
+            text: '2.3 Cross-chain Messaging & Bridges',
+            link: '/modules/2.3-cross-chain-messaging-and-bridges',
+          },
         ],
       },
     ],
