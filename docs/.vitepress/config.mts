@@ -63,6 +63,14 @@ export default defineConfig({
             text: '2.3 Cross-chain Messaging & Bridges',
             link: '/modules/2.3-cross-chain-messaging-and-bridges',
           },
+          {
+            text: '2.4 Building on Arbitrum (EVM)',
+            link: '/modules/2.4-building-on-arbitrum-evm',
+          },
+          {
+            text: 'Live Q&A — Week 2',
+            link: '/modules/live-qa-week-2',
+          },
         ],
       },
     ],
