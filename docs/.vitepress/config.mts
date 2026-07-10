@@ -48,6 +48,15 @@ export default defineConfig({
           },
         ],
       },
+      {
+        text: 'Module 2 — Arbitrum & the Nitro Stack',
+        items: [
+          {
+            text: '2.1 Nitro Architecture',
+            link: '/modules/2.1-nitro-architecture',
+          },
+        ],
+      },
     ],
 
     outline: 'deep',
