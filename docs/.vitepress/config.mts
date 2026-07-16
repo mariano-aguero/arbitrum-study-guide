@@ -96,6 +96,10 @@ export default defineConfig({
             text: '3.5 Reading Examples That Ship',
             link: '/modules/3.5-reading-examples-that-ship',
           },
+          {
+            text: 'Live Q&A — Week 3',
+            link: '/modules/live-qa-week-3',
+          },
         ],
       },
     ],
