@@ -84,6 +84,14 @@ export default defineConfig({
             text: '3.2 Rust for Smart Contracts',
             link: '/modules/3.2-rust-for-smart-contracts',
           },
+          {
+            text: '3.3 Stylus Rust SDK Essentials',
+            link: '/modules/3.3-stylus-rust-sdk-essentials',
+          },
+          {
+            text: '3.4 Local Dev & First Deploy',
+            link: '/modules/3.4-local-dev-first-deploy',
+          },
         ],
       },
     ],
