@@ -73,6 +73,19 @@ export default defineConfig({
           },
         ],
       },
+      {
+        text: 'Module 3 — Stylus Fundamentals',
+        items: [
+          {
+            text: '3.1 Introduction to Stylus',
+            link: '/modules/3.1-introduction-to-stylus',
+          },
+          {
+            text: '3.2 Rust for Smart Contracts',
+            link: '/modules/3.2-rust-for-smart-contracts',
+          },
+        ],
+      },
     ],
 
     outline: 'deep',
