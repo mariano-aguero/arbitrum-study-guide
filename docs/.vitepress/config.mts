@@ -92,6 +92,10 @@ export default defineConfig({
             text: '3.4 Local Dev & First Deploy',
             link: '/modules/3.4-local-dev-first-deploy',
           },
+          {
+            text: '3.5 Reading Examples That Ship',
+            link: '/modules/3.5-reading-examples-that-ship',
+          },
         ],
       },
     ],
